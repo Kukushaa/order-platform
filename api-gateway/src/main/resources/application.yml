@@ -15,7 +15,7 @@ spring:
       resourceserver:
         jwt:
           # Auth service JWK Set endpoint
-          jwk-set-uri: http://localhost:9000/auth/jwks
+          jwk-set-uri: http://127.0.0.1:9000/auth/jwks
 
   cloud:
     gateway:
@@ -24,13 +24,13 @@ spring:
           # All routes
           routes:
             - id: auth
-              uri: http://localhost:9000
+              uri: http://127.0.0.1:9000
               predicates:
                 - Path=/auth/**
               # no auth required (per SecurityConfig)
 
             - id: orders
-              uri: http://localhost:8081
+              uri: http://127.0.0.1:9001
               predicates:
                 - Path=/api/orders/**
               filters:
@@ -41,7 +41,7 @@ spring:
                     key-resolver: "#{@ipKeyResolver}"
 
             - id: payments
-              uri: http://localhost:8083
+              uri: http://127.0.0.1:9002
               predicates:
                 - Path=/api/payments/**
               filters:
