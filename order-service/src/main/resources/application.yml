@@ -1,0 +1,26 @@
+server:
+  port: 9091
+
+spring:
+  application:
+    name: order-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/order_management
+    username: usr
+    password: password
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+token:
+  public-key: |
+    -----BEGIN PUBLIC KEY-----
+    PUBLICKEY
+    -----END PUBLIC KEY-----

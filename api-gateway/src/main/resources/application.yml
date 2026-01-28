@@ -1,0 +1,58 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: api-gateway
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          # Auth service JWK Set endpoint
+          jwk-set-uri: http://localhost:9000/auth/jwks
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          # All routes
+          routes:
+            - id: auth
+              uri: http://localhost:9000
+              predicates:
+                - Path=/auth/**
+              # no auth required (per SecurityConfig)
+
+            - id: orders
+              uri: http://localhost:8081
+              predicates:
+                - Path=/api/orders/**
+              filters:
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenishRate: 10
+                    redis-rate-limiter.burstCapacity: 20
+                    key-resolver: "#{@ipKeyResolver}"
+
+            - id: payments
+              uri: http://localhost:8083
+              predicates:
+                - Path=/api/payments/**
+              filters:
+                - name: RequestRateLimiter
+                  args:
+                    redis-rate-limiter.replenishRate: 10
+                    redis-rate-limiter.burstCapacity: 20
+                    key-resolver: "#{@ipKeyResolver}"
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

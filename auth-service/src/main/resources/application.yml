@@ -1,0 +1,39 @@
+server:
+  port: 9090
+
+spring:
+  application:
+    name: auth-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/order_management
+    username: usr
+    password: password
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+token:
+  minutes: 15
+  issuer: "auth-service"
+
+  private-key: |
+    -----BEGIN PRIVATE KEY-----
+    PRIVATEKEY
+    -----END PRIVATE KEY-----
+  public-key: |
+    -----BEGIN PUBLIC KEY-----
+    PUBLICKEY
+    -----END PUBLIC KEY-----
