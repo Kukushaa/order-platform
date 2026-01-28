@@ -17,20 +17,16 @@ public class OrdersService {
         this.repository = repository;
     }
 
-    public Page<Order> findAll(Pageable pageable) {
-        return repository.findAll(pageable);
-    }
-
-    public Page<Order> findAllByEmail(String email, Pageable pageable) {
-        return repository.findAllByEmail(email, pageable);
+    public Page<Order> findAllByUsername(String username, Pageable pageable) {
+        return repository.findAllByUsername(username, pageable);
     }
 
     public Optional<Order> findById(Long id) {
         return repository.findById(id);
     }
 
-    public Page<Order> findAllByEmailIsNot(String email, Pageable pageable) {
-        return repository.findAllByEmailIsNot(email, pageable);
+    public Page<Order> findAllByUsernameIsNot(String email, Pageable pageable) {
+        return repository.findAllByUsernameIsNot(email, pageable);
     }
 
     public void createNewOrder(OrderDTO dto, String username) {

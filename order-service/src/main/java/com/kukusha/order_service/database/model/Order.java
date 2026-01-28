@@ -21,7 +21,7 @@ public class Order {
     private Long id;
 
     @Column(name = "phone_number", nullable = false)
-    private String phoneNum;
+    private String phoneNumber;
 
     @Column(nullable = false)
     private String email;
