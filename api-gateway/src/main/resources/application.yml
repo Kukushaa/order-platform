@@ -32,7 +32,7 @@ spring:
             - id: orders
               uri: http://127.0.0.1:9001
               predicates:
-                - Path=/api/orders/**
+                - Path=/api/v1/orders/**
               filters:
                 - name: RequestRateLimiter
                   args:
@@ -43,7 +43,7 @@ spring:
             - id: payments
               uri: http://127.0.0.1:9002
               predicates:
-                - Path=/api/payments/**
+                - Path=/api/v1/payments/**
               filters:
                 - name: RequestRateLimiter
                   args:
