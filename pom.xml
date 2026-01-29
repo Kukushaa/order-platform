@@ -25,7 +25,7 @@
     <modules>
         <module>api-gateway</module>
         <module>auth-service</module>
-        <module>email-service</module>
+        <module>email-sender-service</module>
         <module>order-service</module>
         <module>payment-service</module>
     </modules>

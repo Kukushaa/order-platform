@@ -55,5 +55,5 @@ build/
 api-gateway/target
 order-service/target
 auth-service/target
-email-service/target
+email-sender-service/target
 payment-service/target
