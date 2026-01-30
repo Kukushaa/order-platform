@@ -1,6 +1,6 @@
 package com.kukusha.token_service.img;
 
-import com.kukusha.token_service.model.TokenDataObject;
+import com.kukusha.token_service.model.TokenEncoderObject;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -8,8 +8,9 @@ import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
 
 @Component
-public class AccessTokenDriver implements TokenCreatorProcessor, RSAKeyGenerator, JwtEncoderProcessor {
-    public AccessTokenDriver() {
+public class AccessTokenEncoderProcessor implements TokenEncoderProcessor, RSAKeyGenerator, JwtEncoderProcessor {
+
+    public AccessTokenEncoderProcessor() {
         String privateKey = loadResource("keys/access/private.pem");
         String publicKey = loadResource("keys/access/public.pem");
         this.rsaKey = getRSAKey(privateKey, publicKey, "RSA");
@@ -28,7 +29,7 @@ public class AccessTokenDriver implements TokenCreatorProcessor, RSAKeyGenerator
     }
 
     @Override
-    public TokenDataObject obj() {
+    public TokenEncoderObject encObj() {
         return null;
     }
 }

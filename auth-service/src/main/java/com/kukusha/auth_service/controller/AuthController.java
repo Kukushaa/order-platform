@@ -4,7 +4,7 @@ import com.kukusha.auth_service.db.service.UsersService;
 import com.kukusha.auth_service.dto.LoginRequestDTO;
 import com.kukusha.auth_service.dto.RegisterRequestDTO;
 import com.kukusha.auth_service.exceptions.UsernameExistsException;
-import com.kukusha.token_service.img.AccessTokenDriver;
+import com.kukusha.token_service.img.AccessTokenEncoderProcessor;
 import com.kukusha.token_service.model.TokenCreateDTO;
 import com.kukusha.token_service.model.TokenResponse;
 import jakarta.validation.Valid;
@@ -33,12 +33,12 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final UsersService usersService;
-    private final AccessTokenDriver accessTokenDriver;
+    private final AccessTokenEncoderProcessor accessTokenEncoderProcessor;
 
-    public AuthController(AuthenticationManager authenticationManager, UsersService usersService, AccessTokenDriver accessTokenDriver) {
+    public AuthController(AuthenticationManager authenticationManager, UsersService usersService, AccessTokenEncoderProcessor accessTokenEncoderProcessor) {
         this.authenticationManager = authenticationManager;
         this.usersService = usersService;
-        this.accessTokenDriver = accessTokenDriver;
+        this.accessTokenEncoderProcessor = accessTokenEncoderProcessor;
     }
 
     @PostMapping(value = "/login")
@@ -51,7 +51,7 @@ public class AuthController {
 
         List<String> userRoles = authenticate.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 
-        TokenResponse tokenResponse = accessTokenDriver.createToken(new TokenCreateDTO.TokenCreateDTOBuilder()
+        TokenResponse tokenResponse = accessTokenEncoderProcessor.createToken(new TokenCreateDTO.TokenCreateDTOBuilder()
                 .expAt(minutes)
                 .chronoUnit(ChronoUnit.MINUTES)
                 .issuer(issuer)
