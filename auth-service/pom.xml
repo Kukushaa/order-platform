@@ -60,6 +60,11 @@
             <scope>provided</scope>
         </dependency>
 
+        <dependency>
+            <groupId>com.kukusha</groupId>
+            <artifactId>token-service</artifactId>
+            <version>0.1.0-SNAPSHOT</version>
+        </dependency>
     </dependencies>
 
 	<build>

@@ -1,28 +1,34 @@
 package com.kukusha.token_service.img;
 
-import com.nimbusds.jose.jwk.RSAKey;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.oauth2.jwt.JwtEncoder;
+import com.kukusha.token_service.model.TokenDataObject;
 import org.springframework.stereotype.Component;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
 @Component
 public class AccessTokenDriver implements TokenCreatorProcessor, RSAKeyGenerator, JwtEncoderProcessor {
-    @Value("${jwt.access-token.private-key}")
-    private String privateKey;
+    public AccessTokenDriver() {
+        String privateKey = loadResource("keys/access/private.pem");
+        String publicKey = loadResource("keys/access/public.pem");
+        this.rsaKey = getRSAKey(privateKey, publicKey, "RSA");
+        this.encoder = jwtEncoder(rsaKey);
+    }
 
-    @Value("${jwt.access-token.public-key}")
-    private String publicKey;
-
-    @Value("${jwt.access-token.algorythm}")
-    private String algorythm;
-
-    @Override
-    public JwtEncoder jwtEncoder() {
-        return jwtEncoder(rsaJwk());
+    private String loadResource(String path) {
+        try (InputStream is = getClass().getClassLoader().getResourceAsStream(path)) {
+            if (is == null) {
+                throw new IllegalStateException("Resource not found: " + path);
+            }
+            return new String(is.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed to load resource: " + path, e);
+        }
     }
 
     @Override
-    public RSAKey rsaJwk() {
-        return getRSAKey(privateKey, publicKey, algorythm);
+    public TokenDataObject obj() {
+        return null;
     }
 }

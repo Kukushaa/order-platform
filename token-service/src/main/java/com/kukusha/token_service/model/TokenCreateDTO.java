@@ -8,6 +8,7 @@ public record TokenCreateDTO(String subject,
                              int expAt,
                              ChronoUnit chronoUnit,
                              Map<String, Object> claims) {
+
     public static class TokenCreateDTOBuilder {
         private String subject;
         private String issuer;
