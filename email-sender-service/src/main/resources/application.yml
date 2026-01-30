@@ -3,7 +3,7 @@ spring:
     name: "email-sender-service"
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/order_management
+    url: jdbc:postgresql://localhost:5432/products_management
     username: usr
     password: password
 
