@@ -57,3 +57,4 @@ product-service/target
 auth-service/target
 email-sender-service/target
 payment-service/target
+token-service/target
