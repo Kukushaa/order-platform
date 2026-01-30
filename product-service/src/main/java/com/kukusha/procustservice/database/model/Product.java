@@ -1,7 +1,7 @@
-package com.kukusha.order_service.database.model;
+package com.kukusha.procustservice.database.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.kukusha.order_service.dto.OrderDTO;
+import com.kukusha.procustservice.dto.ProductDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,8 +14,8 @@ import org.springframework.beans.BeanUtils;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "orders")
-public class Order {
+@Table(name = "products")
+public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,8 +29,8 @@ public class Order {
     @Column(nullable = false, length = 200)
     private String description;
 
-    @Column(name = "order_type", nullable = false)
-    private String orderType;
+    @Column(name = "product_type", nullable = false)
+    private String productType;
 
     @Column(nullable = false)
     private long price;
@@ -39,7 +39,7 @@ public class Order {
     @JsonIgnore
     private String username;
 
-    public Order(OrderDTO dto, String username) {
+    public Product(ProductDTO dto, String username) {
         BeanUtils.copyProperties(dto, this);
         this.username = username;
     }

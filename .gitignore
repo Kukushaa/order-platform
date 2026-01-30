@@ -53,7 +53,7 @@ build/
 
 ## MICROSERVICE
 api-gateway/target
-order-service/target
+product-service/target
 auth-service/target
 email-sender-service/target
 payment-service/target

@@ -5,13 +5,13 @@
 
     <parent>
         <groupId>com.kukusha</groupId>
-        <artifactId>order-platform</artifactId>
+        <artifactId>product-platform</artifactId>
         <version>0.1.0-SNAPSHOT</version>
     </parent>
 
-	<artifactId>order-service</artifactId>
+	<artifactId>product-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>order-service</name>
+	<name>product-service</name>
 
 	<properties>
 		<java.version>21</java.version>

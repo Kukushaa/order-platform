@@ -29,10 +29,10 @@ spring:
                 - Path=/auth/**
               # no auth required (per SecurityConfig)
 
-            - id: orders
+            - id: products
               uri: http://127.0.0.1:9001
               predicates:
-                - Path=/api/v1/orders/**
+                - Path=/api/v1/products/**
               filters:
                 - name: RequestRateLimiter
                   args:

@@ -1,4 +1,4 @@
-package com.kukusha.order_service;
+package com.kukusha.procustservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -8,8 +8,8 @@ import static org.springframework.data.web.config.EnableSpringDataWebSupport.Pag
 
 @SpringBootApplication
 @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
-public class OrderServiceApplication {
+public class ProductsServiceApplication {
 	public static void main(String[] args) {
-		SpringApplication.run(OrderServiceApplication.class, args);
+		SpringApplication.run(ProductsServiceApplication.class, args);
 	}
 }

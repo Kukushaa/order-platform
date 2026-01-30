@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.kukusha</groupId>
-    <artifactId>order-platform</artifactId>
+    <artifactId>product-platform</artifactId>
     <version>0.1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>order-platform</name>
+    <name>product-platform</name>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -26,7 +26,7 @@
         <module>api-gateway</module>
         <module>auth-service</module>
         <module>email-sender-service</module>
-        <module>order-service</module>
+        <module>product-service</module>
         <module>payment-service</module>
     </modules>
 
