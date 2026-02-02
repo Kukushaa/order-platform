@@ -2,9 +2,10 @@ package com.kukusha.auth_service.controller;
 
 import com.kukusha.auth_service.db.service.UsersService;
 import com.kukusha.auth_service.dto.LoginRequestDTO;
+import com.kukusha.auth_service.dto.RefreshTokenRequestDTO;
 import com.kukusha.auth_service.dto.RegisterRequestDTO;
 import com.kukusha.auth_service.exceptions.UsernameExistsException;
-import com.kukusha.auth_service.response.LoginResponse;
+import com.kukusha.auth_service.response.TokenResponse;
 import com.kukusha.auth_service.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -25,10 +26,10 @@ public class AuthController {
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
-        LoginResponse loginResponse = authService.loginUser(loginRequestDTO.username(), loginRequestDTO.password());
+    public ResponseEntity<TokenResponse> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
+        TokenResponse tokenResponse = authService.loginUser(loginRequestDTO.username(), loginRequestDTO.password());
 
-        return new ResponseEntity<>(loginResponse, HttpStatus.OK);
+        return new ResponseEntity<>(tokenResponse, HttpStatus.OK);
     }
 
     @PostMapping(value = "/register")
@@ -40,6 +41,12 @@ public class AuthController {
         usersService.register(registerRequestDTO);
 
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @PostMapping(value = "/refresh")
+    public ResponseEntity<TokenResponse> refresh(@Valid @RequestBody RefreshTokenRequestDTO refreshTokenRequestDTO) {
+        TokenResponse tokenResponse = authService.refreshTokens(refreshTokenRequestDTO.refreshToken());
+        return new ResponseEntity<>(tokenResponse, HttpStatus.OK);
     }
 
     @GetMapping(value = "/jwks")
