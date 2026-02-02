@@ -4,70 +4,31 @@ import com.kukusha.auth_service.db.service.UsersService;
 import com.kukusha.auth_service.dto.LoginRequestDTO;
 import com.kukusha.auth_service.dto.RegisterRequestDTO;
 import com.kukusha.auth_service.exceptions.UsernameExistsException;
-import com.kukusha.token_service.processor.AccessTokenProcessor;
-import com.kukusha.token_service.model.TokenCreateDTO;
-import com.kukusha.token_service.model.TokenResponse;
+import com.kukusha.auth_service.response.LoginResponse;
+import com.kukusha.auth_service.service.AuthService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.temporal.ChronoUnit;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    @Value("${token.issuer}")
-    private String issuer;
-
-    @Value("${token.minutes}")
-    private int minutes;
-
-    private final AuthenticationManager authenticationManager;
+    private final AuthService authService;
     private final UsersService usersService;
-    private final AccessTokenProcessor accessTokenEncoderProcessor;
 
-    public AuthController(AuthenticationManager authenticationManager, UsersService usersService, AccessTokenProcessor accessTokenEncoderProcessor) {
-        this.authenticationManager = authenticationManager;
+    public AuthController(UsersService usersService, AuthService authService) {
         this.usersService = usersService;
-        this.accessTokenEncoderProcessor = accessTokenEncoderProcessor;
+        this.authService = authService;
     }
 
     @PostMapping(value = "/login")
-    public ResponseEntity<Map<String, Object>> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
-        String username = loginRequestDTO.username();
+    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
+        LoginResponse loginResponse = authService.loginUser(loginRequestDTO.username(), loginRequestDTO.password());
 
-        Authentication authenticate = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(username, loginRequestDTO.password())
-        );
-
-        List<String> userRoles = authenticate.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
-
-        TokenResponse tokenResponse = accessTokenEncoderProcessor.createToken(new TokenCreateDTO.TokenCreateDTOBuilder()
-                .expAt(minutes)
-                .chronoUnit(ChronoUnit.MINUTES)
-                .issuer(issuer)
-                .subject(authenticate.getName())
-                .claims(Map.of(
-                                "role", userRoles,
-                                "username", username
-                        )
-                )
-                .build());
-
-        return new ResponseEntity<>(Map.of(
-                "accessToken", tokenResponse.token(),
-                "tokenType", "Bearer",
-                "expAt", tokenResponse.expAt().toString()),
-                HttpStatus.OK);
+        return new ResponseEntity<>(loginResponse, HttpStatus.OK);
     }
 
     @PostMapping(value = "/register")
@@ -83,8 +44,6 @@ public class AuthController {
 
     @GetMapping(value = "/jwks")
     public ResponseEntity<Map<String, Object>> getJwks() {
-//
-//        return new ResponseEntity<>(new JWKSet(rsaJwk.toPublicJWK()).toJSONObject(), HttpStatus.OK);
-        return new ResponseEntity<>(new HashMap<>(), HttpStatus.OK);
+        return new ResponseEntity<>(authService.getPublicJWKAsJsonObject(), HttpStatus.OK);
     }
 }
