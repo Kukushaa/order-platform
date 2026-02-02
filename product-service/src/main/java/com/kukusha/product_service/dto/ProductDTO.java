@@ -1,4 +1,4 @@
-package com.kukusha.procustservice.dto;
+package com.kukusha.product_service.dto;
 
 public record ProductDTO(String phoneNumber,
                          String email,

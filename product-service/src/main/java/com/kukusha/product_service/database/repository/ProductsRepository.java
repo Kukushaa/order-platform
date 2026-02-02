@@ -1,6 +1,6 @@
-package com.kukusha.procustservice.database.repository;
+package com.kukusha.product_service.database.repository;
 
-import com.kukusha.procustservice.database.model.Product;
+import com.kukusha.product_service.database.model.Product;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

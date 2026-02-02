@@ -1,8 +1,8 @@
-package com.kukusha.procustservice.database.service;
+package com.kukusha.product_service.database.service;
 
-import com.kukusha.procustservice.database.model.Product;
-import com.kukusha.procustservice.database.repository.ProductsRepository;
-import com.kukusha.procustservice.dto.ProductDTO;
+import com.kukusha.product_service.database.model.Product;
+import com.kukusha.product_service.database.repository.ProductsRepository;
+import com.kukusha.product_service.dto.ProductDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

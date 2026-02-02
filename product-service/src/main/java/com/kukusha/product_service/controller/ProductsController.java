@@ -1,14 +1,15 @@
-package com.kukusha.procustservice.controller;
+package com.kukusha.product_service.controller;
 
-import com.kukusha.procustservice.database.model.Product;
-import com.kukusha.procustservice.database.service.ProductsService;
-import com.kukusha.procustservice.dto.ProductDTO;
+import com.kukusha.product_service.database.model.Product;
+import com.kukusha.product_service.database.service.ProductsService;
+import com.kukusha.product_service.dto.ProductDTO;
+import com.kukusha.token_service.model.TokenType;
+import com.kukusha.token_service.service.TokenProcessorDriver;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.oauth2.jwt.JwtDecoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -22,11 +23,11 @@ public class ProductsController {
     private static final String USERNAME_CLAIMS_KEY = "username";
 
     private final ProductsService productsService;
-    private final JwtDecoder jwtDecoder;
+    private final TokenProcessorDriver tokenProcessorDriver;
 
-    public ProductsController(ProductsService productsService, JwtDecoder jwtDecoder) {
+    public ProductsController(ProductsService productsService, TokenProcessorDriver tokenProcessorDriver) {
         this.productsService = productsService;
-        this.jwtDecoder = jwtDecoder;
+        this.tokenProcessorDriver = tokenProcessorDriver;
     }
 
     @GetMapping
@@ -63,6 +64,8 @@ public class ProductsController {
     }
 
     private String getUsernameFromToken(String token) {
-        return jwtDecoder.decode(token.replace(AUTH_HEADER_KEY, EMPTY_STRING)).getClaimAsString(USERNAME_CLAIMS_KEY);
+        String cleanToken = token.replace(AUTH_HEADER_KEY, EMPTY_STRING);
+        return tokenProcessorDriver.getTokenProcessor(TokenType.ACCESS)
+                .getClaimsAsString(cleanToken, USERNAME_CLAIMS_KEY);
     }
 }

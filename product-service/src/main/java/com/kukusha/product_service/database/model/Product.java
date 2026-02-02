@@ -1,7 +1,7 @@
-package com.kukusha.procustservice.database.model;
+package com.kukusha.product_service.database.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.kukusha.procustservice.dto.ProductDTO;
+import com.kukusha.product_service.dto.ProductDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

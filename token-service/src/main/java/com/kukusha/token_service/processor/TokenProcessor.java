@@ -36,4 +36,8 @@ public interface TokenProcessor {
 
         return new TokenResponse(token, exp);
     }
+
+    default String getClaimsAsString(String token, String claim) {
+        return encObj().getJwtDecoder().decode(token).getClaimAsString(claim);
+    }
 }

@@ -1,4 +1,4 @@
-package com.kukusha.procustservice.config;
+package com.kukusha.product_service.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
