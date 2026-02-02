@@ -25,9 +25,9 @@ public abstract class TokenObject {
     private final KeyFactory keyFactory;
     private final RSAKey rsaJwk;
 
-    public TokenObject(String privateKey, String publicKey) {
+    public TokenObject(String privateKey, String publicKey, String keyId) {
         this.keyFactory = createKeyFactory("RSA");
-        this.rsaJwk = generateRSAKey(privateKey, publicKey);
+        this.rsaJwk = generateRSAKey(privateKey, publicKey, keyId);
         this.jwtEncoder = createJwtEncoder(createJWKSource(rsaJwk));
         this.jwtDecoder = createDecoder(publicKey);
     }
@@ -45,14 +45,15 @@ public abstract class TokenObject {
     }
 
     private RSAKey generateRSAKey(String privateKeyPEM,
-                                  String publicKeyPEM) {
+                                  String publicKeyPEM,
+                                  String keyId) {
         try {
             RSAPrivateKey privateKey = (RSAPrivateKey) keyFactory.generatePrivate(getPrivateKeyPKCS8E(privateKeyPEM));
             RSAPublicKey publicKey = (RSAPublicKey) keyFactory.generatePublic(getPublicKeyX509(publicKeyPEM));
 
             return new RSAKey.Builder(publicKey)
                     .privateKey(privateKey)
-                    .keyID(UUID.randomUUID().toString())
+                    .keyID(keyId)
                     .build();
         } catch (Exception e) {
             throw new IllegalStateException("Failed to load RSA keys", e);
