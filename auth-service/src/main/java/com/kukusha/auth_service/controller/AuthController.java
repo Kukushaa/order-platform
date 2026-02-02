@@ -4,7 +4,7 @@ import com.kukusha.auth_service.db.service.UsersService;
 import com.kukusha.auth_service.dto.LoginRequestDTO;
 import com.kukusha.auth_service.dto.RegisterRequestDTO;
 import com.kukusha.auth_service.exceptions.UsernameExistsException;
-import com.kukusha.token_service.img.AccessTokenEncoderProcessor;
+import com.kukusha.token_service.processor.AccessTokenProcessor;
 import com.kukusha.token_service.model.TokenCreateDTO;
 import com.kukusha.token_service.model.TokenResponse;
 import jakarta.validation.Valid;
@@ -33,9 +33,9 @@ public class AuthController {
 
     private final AuthenticationManager authenticationManager;
     private final UsersService usersService;
-    private final AccessTokenEncoderProcessor accessTokenEncoderProcessor;
+    private final AccessTokenProcessor accessTokenEncoderProcessor;
 
-    public AuthController(AuthenticationManager authenticationManager, UsersService usersService, AccessTokenEncoderProcessor accessTokenEncoderProcessor) {
+    public AuthController(AuthenticationManager authenticationManager, UsersService usersService, AccessTokenProcessor accessTokenEncoderProcessor) {
         this.authenticationManager = authenticationManager;
         this.usersService = usersService;
         this.accessTokenEncoderProcessor = accessTokenEncoderProcessor;

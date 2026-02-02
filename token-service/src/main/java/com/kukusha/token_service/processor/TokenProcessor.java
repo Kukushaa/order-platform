@@ -1,8 +1,9 @@
-package com.kukusha.token_service.img;
+package com.kukusha.token_service.processor;
 
 import com.kukusha.token_service.model.TokenCreateDTO;
-import com.kukusha.token_service.model.TokenEncoderObject;
+import com.kukusha.token_service.model.TokenObject;
 import com.kukusha.token_service.model.TokenResponse;
+import com.kukusha.token_service.model.TokenType;
 import org.springframework.security.oauth2.jose.jws.SignatureAlgorithm;
 import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
@@ -10,8 +11,10 @@ import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 
 import java.time.Instant;
 
-public interface TokenEncoderProcessor {
-    TokenEncoderObject encObj();
+public interface TokenProcessor {
+    TokenObject encObj();
+
+    TokenType type();
 
     default TokenResponse createToken(TokenCreateDTO tokenCreateDTO) {
         Instant now = Instant.now();
