@@ -5,15 +5,13 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class ProductCreatedData extends KafkaMessageObject {
+public class ProductCreatedData extends KafkaEmailMessageObject {
     private String productType;
-    private String username;
     private long price;
 
-    public ProductCreatedData(String username, String productType, String username1, long price) {
+    public ProductCreatedData(String username, String productType, long price) {
         super(username);
         this.productType = productType;
-        this.username = username1;
         this.price = price;
     }
 }

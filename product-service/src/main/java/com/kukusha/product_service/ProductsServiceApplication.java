@@ -11,7 +11,8 @@ import static org.springframework.data.web.config.EnableSpringDataWebSupport.Pag
 @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO)
 @ComponentScan(basePackages = {
         "com.kukusha.product_service",
-        "com.kukusha.token_service"
+        "com.kukusha.token_service",
+        "com.kukusha.kafka_messages_sender"
 })
 public class ProductsServiceApplication {
     public static void main(String[] args) {

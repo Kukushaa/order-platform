@@ -32,6 +32,11 @@ public class KafkaMailSenderComponent {
 
     @KafkaListener(topics = "emails.product.create", groupId = "email-sender-service")
     public void sendProductCreateEmail() {
-
+        String template = templatesService.getTemplate(TemplatesService.Templates.REGISTRATION, Map.of("username", data.getUsername()));
+        try {
+            mailService.sendHtml(data.getEmail(), "Welcome!", template);
+        } catch (MessagingException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.kukusha.kafka_messages_sender.api;
 
 import com.kukusha.kafka_messages_sender.model.EmailType;
+import com.kukusha.kafka_messages_sender.model.KafkaEmailMessageObject;
 import com.kukusha.kafka_messages_sender.model.KafkaMessageObject;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -13,7 +14,7 @@ public class KafkaMessagesSenderAPI {
         this.kafkaTemplate = kafkaTemplate;
     }
 
-    public void sendEmail(EmailType emailType, KafkaMessageObject kafkaMessageObject) {
-        kafkaTemplate.send(emailType.getKakfaKey(), kafkaMessageObject.getUsername(), kafkaMessageObject);
+    public void sendEmail(EmailType emailType, KafkaEmailMessageObject kafkaEmailMessageObject) {
+        kafkaTemplate.send(emailType.getKakfaKey(), kafkaEmailMessageObject.getUsername(), kafkaEmailMessageObject);
     }
 }

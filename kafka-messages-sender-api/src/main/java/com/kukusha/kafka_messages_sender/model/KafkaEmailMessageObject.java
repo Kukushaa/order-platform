@@ -1,0 +1,14 @@
+package com.kukusha.kafka_messages_sender.model;
+
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+public abstract class KafkaEmailMessageObject extends KafkaMessageObject {
+    protected String emailTo;
+
+    public KafkaEmailMessageObject(String username) {
+        super(username);
+    }
+}

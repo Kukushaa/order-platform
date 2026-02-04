@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
 @Getter
-public class RegisterSuccessfullEmailData extends KafkaMessageObject {
+public class RegisterSuccessfullEmailData extends KafkaEmailMessageObject {
     private final String email;
 
     @JsonCreator

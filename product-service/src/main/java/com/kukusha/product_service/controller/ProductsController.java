@@ -1,5 +1,8 @@
 package com.kukusha.product_service.controller;
 
+import com.kukusha.kafka_messages_sender.api.KafkaMessagesSenderAPI;
+import com.kukusha.kafka_messages_sender.model.EmailType;
+import com.kukusha.kafka_messages_sender.model.ProductCreatedData;
 import com.kukusha.product_service.database.model.Product;
 import com.kukusha.product_service.database.service.ProductsService;
 import com.kukusha.product_service.dto.ProductDTO;
@@ -24,10 +27,12 @@ public class ProductsController {
 
     private final ProductsService productsService;
     private final TokenProcessorDriver tokenProcessorDriver;
+    private final KafkaMessagesSenderAPI kafkaMessagesSenderAPI;
 
-    public ProductsController(ProductsService productsService, TokenProcessorDriver tokenProcessorDriver) {
+    public ProductsController(ProductsService productsService, TokenProcessorDriver tokenProcessorDriver, KafkaMessagesSenderAPI kafkaMessagesSenderAPI) {
         this.productsService = productsService;
         this.tokenProcessorDriver = tokenProcessorDriver;
+        this.kafkaMessagesSenderAPI = kafkaMessagesSenderAPI;
     }
 
     @GetMapping
@@ -60,6 +65,7 @@ public class ProductsController {
                                               @RequestHeader(value = "Authorization") String token) {
         String username = getUsernameFromToken(token);
         productsService.createNewProduct(dto, username);
+        kafkaMessagesSenderAPI.sendEmail(EmailType.CREATE_PRODUCT, new ProductCreatedData(username, dto.productType(), dto.price()));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
