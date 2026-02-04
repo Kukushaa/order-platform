@@ -29,4 +29,9 @@ public class KafkaMailSenderComponent {
             throw new RuntimeException(e);
         }
     }
+
+    @KafkaListener(topics = "emails.product.create", groupId = "email-sender-service")
+    public void sendProductCreateEmail() {
+
+    }
 }
