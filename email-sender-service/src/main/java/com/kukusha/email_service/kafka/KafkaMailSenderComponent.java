@@ -2,7 +2,7 @@ package com.kukusha.email_service.kafka;
 
 import com.kukusha.email_service.service.MailService;
 import com.kukusha.email_service.service.TemplatesService;
-import com.kukusha.emailsenderapi.model.RegisterSuccessfullEmailData;
+import com.kukusha.kafka_messages_sender.model.RegisterSuccessfullEmailData;
 import jakarta.mail.MessagingException;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;

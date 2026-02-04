@@ -1,4 +1,4 @@
-package com.kukusha.emailsenderapi.model;
+package com.kukusha.kafka_messages_sender.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

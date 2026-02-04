@@ -70,9 +70,10 @@
             <artifactId>token-service</artifactId>
             <version>0.1.0-SNAPSHOT</version>
         </dependency>
+
         <dependency>
             <groupId>com.kukusha</groupId>
-            <artifactId>email-sender-api</artifactId>
+            <artifactId>kafka-messages-sender-api</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

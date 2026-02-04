@@ -51,10 +51,11 @@ build/
 ### VS Code ###
 .vscode/
 
-## MICROSERVICE
+## MICROSERVICES
 api-gateway/target
 product-service/target
 auth-service/target
 email-sender-service/target
 payment-service/target
 token-service/target
+kafka-messages-sender-api/target

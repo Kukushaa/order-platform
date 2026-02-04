@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 @ComponentScan(basePackages = {
         "com.kukusha.auth_service",
         "com.kukusha.token_service",
-        "com.kukusha.emailsenderapi"
+        "com.kukusha.kafka_messages_sender"
 })
 public class AuthServiceApplication {
 	public static void main(String[] args) {

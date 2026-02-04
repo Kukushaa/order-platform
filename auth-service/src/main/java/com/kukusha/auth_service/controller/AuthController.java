@@ -7,8 +7,8 @@ import com.kukusha.auth_service.dto.RegisterRequestDTO;
 import com.kukusha.auth_service.exceptions.UsernameExistsException;
 import com.kukusha.auth_service.response.TokenResponse;
 import com.kukusha.auth_service.service.AuthService;
-import com.kukusha.emailsenderapi.api.MailSenderAPI;
-import com.kukusha.emailsenderapi.model.RegisterSuccessfullEmailData;
+import com.kukusha.kafka_messages_sender.api.KafkaMessagesSenderAPI;
+import com.kukusha.kafka_messages_sender.model.RegisterSuccessfullEmailData;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,12 +21,12 @@ import java.util.Map;
 public class AuthController {
     private final AuthService authService;
     private final UsersService usersService;
-    private final MailSenderAPI mailSenderAPI;
+    private final KafkaMessagesSenderAPI kafkaMessagesSenderAPI;
 
-    public AuthController(UsersService usersService, AuthService authService, MailSenderAPI mailSenderAPI) {
+    public AuthController(UsersService usersService, AuthService authService, KafkaMessagesSenderAPI kafkaMessagesSenderAPI) {
         this.usersService = usersService;
         this.authService = authService;
-        this.mailSenderAPI = mailSenderAPI;
+        this.kafkaMessagesSenderAPI = kafkaMessagesSenderAPI;
     }
 
     @PostMapping(value = "/login")
@@ -43,7 +43,7 @@ public class AuthController {
         }
 
         usersService.register(registerRequestDTO);
-        mailSenderAPI.sendEmail(new RegisterSuccessfullEmailData(registerRequestDTO.email(),  registerRequestDTO.username()));
+        kafkaMessagesSenderAPI.sendEmail(new RegisterSuccessfullEmailData(registerRequestDTO.email(), registerRequestDTO.username()));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
