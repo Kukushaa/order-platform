@@ -66,4 +66,15 @@ public class ProductsController {
         kafkaMessagesSenderAPI.sendEmail(EmailType.CREATE_PRODUCT, new ProductCreatedData(username, user.getEmail(), dto.productType(), dto.price()));
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    @PostMapping(value = "/{id}/buy")
+    public ResponseEntity<Void> buyProduct(@PathVariable Long id,
+                                           Principal principal) {
+        // TODO: If product owner try to buy own product error (Security)
+        // TODO: If product not found error
+        // TODO: If every check went well, call payment-service to create payment intent on Stripe
+        // TODO: If payment went well: product amount - 1. Notify owner of selling product
+        // TODO: If product amount == 0, product status: SELLED
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
