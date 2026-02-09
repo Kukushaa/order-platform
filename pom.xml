@@ -31,6 +31,7 @@
         <module>token-service</module>
         <module>users-service</module>
         <module>kafka-messages-sender-api</module>
+        <module>users-shared-lib</module>
     </modules>
 
     <dependencyManagement>
