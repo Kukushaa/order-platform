@@ -29,6 +29,7 @@
         <module>product-service</module>
         <module>payment-service</module>
         <module>token-service</module>
+        <module>users-service</module>
         <module>kafka-messages-sender-api</module>
     </modules>
 

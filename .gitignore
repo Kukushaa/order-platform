@@ -58,4 +58,5 @@ auth-service/target
 email-sender-service/target
 payment-service/target
 token-service/target
+users-service/target
 kafka-messages-sender-api/target
