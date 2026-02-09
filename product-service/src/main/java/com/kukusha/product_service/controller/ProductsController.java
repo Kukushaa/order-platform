@@ -70,8 +70,18 @@ public class ProductsController {
     @PostMapping(value = "/{id}/buy")
     public ResponseEntity<Void> buyProduct(@PathVariable Long id,
                                            Principal principal) {
-        // TODO: If product owner try to buy own product error (Security)
-        // TODO: If product not found error
+        String username = principal.getName();
+        Optional<Product> productOptional = productsService.findById(id);
+
+        if (productOptional.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Product not found");
+        }
+
+        Product product = productOptional.get();
+        if (product.getUsername().equals(username)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User can't buy own product!");
+        }
+
         // TODO: If every check went well, call payment-service to create payment intent on Stripe
         // TODO: If payment went well: product amount - 1. Notify owner of selling product
         // TODO: If product amount == 0, product status: SELLED
