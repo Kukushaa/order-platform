@@ -65,7 +65,7 @@ public class ProductsController {
                                               @RequestHeader(value = "Authorization") String token) {
         String username = getUsernameFromToken(token);
         productsService.createNewProduct(dto, username);
-        kafkaMessagesSenderAPI.sendEmail(EmailType.CREATE_PRODUCT, new ProductCreatedData(username, dto.productType(), dto.price()));
+        kafkaMessagesSenderAPI.sendEmail(EmailType.CREATE_PRODUCT, new ProductCreatedData(username, "emailTo", dto.productType(), dto.price()));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

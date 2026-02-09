@@ -9,8 +9,8 @@ public class ProductCreatedData extends KafkaEmailMessageObject {
     private String productType;
     private long price;
 
-    public ProductCreatedData(String username, String productType, long price) {
-        super(username);
+    public ProductCreatedData(String username, String emailTo, String productType, long price) {
+        super(username, emailTo);
         this.productType = productType;
         this.price = price;
     }

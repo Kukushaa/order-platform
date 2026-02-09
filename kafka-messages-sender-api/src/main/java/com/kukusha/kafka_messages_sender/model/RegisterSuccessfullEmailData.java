@@ -6,12 +6,9 @@ import lombok.Getter;
 
 @Getter
 public class RegisterSuccessfullEmailData extends KafkaEmailMessageObject {
-    private final String email;
-
     @JsonCreator
     public RegisterSuccessfullEmailData(@JsonProperty("email") String email,
                                         @JsonProperty("username") String username) {
-        super(username);
-        this.email = email;
+        super(username, email);
     }
 }

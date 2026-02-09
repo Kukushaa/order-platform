@@ -2,6 +2,7 @@ package com.kukusha.email_service.kafka;
 
 import com.kukusha.email_service.service.MailService;
 import com.kukusha.email_service.service.TemplatesService;
+import com.kukusha.kafka_messages_sender.model.ProductCreatedData;
 import com.kukusha.kafka_messages_sender.model.RegisterSuccessfullEmailData;
 import jakarta.mail.MessagingException;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -24,17 +25,17 @@ public class KafkaMailSenderComponent {
         String template = templatesService.getTemplate(TemplatesService.Templates.REGISTRATION, Map.of("username", data.getUsername()));
 
         try {
-            mailService.sendHtml(data.getEmail(), "Welcome!", template);
+            mailService.sendHtml(data.getEmailTo(), "Welcome!", template);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
     }
 
     @KafkaListener(topics = "emails.product.create", groupId = "email-sender-service")
-    public void sendProductCreateEmail() {
+    public void sendProductCreateEmail(ProductCreatedData data) {
         String template = templatesService.getTemplate(TemplatesService.Templates.REGISTRATION, Map.of("username", data.getUsername()));
         try {
-            mailService.sendHtml(data.getEmail(), "Welcome!", template);
+            mailService.sendHtml(data.getEmailTo(), "Welcome!", template);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }

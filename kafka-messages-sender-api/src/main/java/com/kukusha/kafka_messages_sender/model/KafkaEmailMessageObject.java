@@ -8,7 +8,8 @@ import lombok.Setter;
 public abstract class KafkaEmailMessageObject extends KafkaMessageObject {
     protected String emailTo;
 
-    public KafkaEmailMessageObject(String username) {
+    public KafkaEmailMessageObject(String username, String emailTo) {
         super(username);
+        this.emailTo = emailTo;
     }
 }
