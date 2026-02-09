@@ -36,11 +36,23 @@ public class Product {
     private long price;
 
     @Column(nullable = false)
+    private long amount;
+
+    @Column(nullable = false)
     @JsonIgnore
     private String username;
 
     public Product(ProductDTO dto, String username) {
         BeanUtils.copyProperties(dto, this);
         this.username = username;
+    }
+
+    public ProductStatus status() {
+        return this.amount == 0 ? ProductStatus.NOT_IN_STOCK : ProductStatus.IN_STOCK;
+    }
+
+    public enum ProductStatus {
+        IN_STOCK,
+        NOT_IN_STOCK
     }
 }

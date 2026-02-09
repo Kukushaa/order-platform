@@ -4,5 +4,6 @@ public record ProductDTO(String phoneNumber,
                          String email,
                          String description,
                          String productType,
-                         long price) {
+                         long price,
+                         long amount) {
 }

@@ -26,8 +26,8 @@ public class PaymentDTO {
     @Email
     private String email;
 
-    @NotEmpty
-    private String description;
+    private Long productId;
+
     private Map<String, String> metaData = new HashMap<>();
 
     public PaymentDTO() {

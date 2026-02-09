@@ -1,6 +1,9 @@
 package com.kukusha.payment_service.controller;
 
 import com.kukusha.payment_service.dto.PaymentDTO;
+import com.kukusha.payment_service.service.StripeService;
+import com.stripe.exception.StripeException;
+import com.stripe.model.PaymentIntent;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -8,11 +11,20 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping(value = "/api/v1/payments")
 public class PaymentsController {
+    private final StripeService stripeService;
+
+    public PaymentsController(StripeService stripeService) {
+        this.stripeService = stripeService;
+    }
+
     @PostMapping
-    public ResponseEntity<?> createPayment(@RequestBody PaymentDTO paymentDTO) {
+    public ResponseEntity<Map<String, String>> createPayment(@RequestBody PaymentDTO paymentDTO) throws StripeException {
+        PaymentIntent paymentIntent = stripeService.createPaymentIntent(paymentDTO);
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
     }
 }

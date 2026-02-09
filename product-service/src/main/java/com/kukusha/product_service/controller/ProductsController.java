@@ -82,6 +82,10 @@ public class ProductsController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User can't buy own product!");
         }
 
+        if (product.status().equals(Product.ProductStatus.NOT_IN_STOCK)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No product in stock!");
+        }
+
         // TODO: If every check went well, call payment-service to create payment intent on Stripe
         // TODO: If payment went well: product amount - 1. Notify owner of selling product
         // TODO: If product amount == 0, product status: SELLED

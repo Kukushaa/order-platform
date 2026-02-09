@@ -1,7 +1,16 @@
-# Generate access token keys
-openssl genpkey -algorithm RSA -out keys/access/private.pem -pkeyopt rsa_keygen_bits:2048
-openssl rsa -pubout -in keys/access/private.pem -out keys/access/public.pem
+#!/bin/bash
 
-# Generate refresh token keys
-openssl genpkey -algorithm RSA -out keys/refresh/private.pem -pkeyopt rsa_keygen_bits:2048
-openssl rsa -pubout -in keys/refresh/private.pem -out keys/refresh/public.pem
+TYPE=$1
+
+if [ -z "$TYPE" ]; then
+  echo "Usage: $0 <type>"
+  echo "Example: $0 access"
+  exit 1
+fi
+
+mkdir -p "keys/$TYPE"
+
+openssl genpkey -algorithm RSA -out "keys/$TYPE/private.pem" -pkeyopt rsa_keygen_bits:2048
+openssl rsa -pubout -in "keys/$TYPE/private.pem" -out "keys/$TYPE/public.pem"
+
+echo "Keys generated in keys/$TYPE/"
