@@ -7,7 +7,8 @@ import org.springframework.context.annotation.ComponentScan;
 @SpringBootApplication
 @ComponentScan(basePackages = {
         "com.kukusha.payment_service",
-        "com.kukusha.token_service"
+        "com.kukusha.token_service",
+        "com.kukusha.kafka_messages_sender"
 })
 public class PaymentServiceApplication {
 

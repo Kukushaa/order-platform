@@ -25,7 +25,8 @@ public class TemplatesService {
     @Getter
     public enum Templates {
         REGISTRATION("email/users/register"),
-        PRODUCT_CREATE("email/prducts/create");
+        PRODUCT_CREATE("email/prducts/create"),
+        PAYMENT_COMPLETED("email/payments/completed");
 
         private final String template;
 

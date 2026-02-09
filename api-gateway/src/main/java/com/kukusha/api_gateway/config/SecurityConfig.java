@@ -15,6 +15,7 @@ public class SecurityConfig {
                 .csrf(ServerHttpSecurity.CsrfSpec::disable) // Disable CSRF Spec
                 .authorizeExchange(ex -> ex
                         .pathMatchers("/auth/**", "/actuator/**").permitAll()
+                        .pathMatchers(HttpMethod.POST, "/api/v1/payments/confirm").permitAll()
                         .pathMatchers(HttpMethod.OPTIONS).permitAll()
                         .anyExchange().authenticated()
                 )

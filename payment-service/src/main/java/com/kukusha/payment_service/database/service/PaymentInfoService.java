@@ -4,6 +4,8 @@ import com.kukusha.payment_service.database.model.PaymentInfo;
 import com.kukusha.payment_service.database.repository.PaymentInfoRepositroy;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class PaymentInfoService {
     private final PaymentInfoRepositroy repositroy;
@@ -14,5 +16,9 @@ public class PaymentInfoService {
 
     public void save(PaymentInfo paymentInfo) {
         repositroy.save(paymentInfo);
+    }
+
+    public Optional<PaymentInfo> findByPaymentIntentId(String paymentIntentId) {
+        return repositroy.findByPaymentIntentId(paymentIntentId);
     }
 }

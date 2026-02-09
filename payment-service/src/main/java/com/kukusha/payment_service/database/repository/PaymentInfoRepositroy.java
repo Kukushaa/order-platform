@@ -4,6 +4,9 @@ import com.kukusha.payment_service.database.model.PaymentInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface PaymentInfoRepositroy extends JpaRepository<PaymentInfo, Long> {
+    Optional<PaymentInfo> findByPaymentIntentId(String paymentIntentId);
 }

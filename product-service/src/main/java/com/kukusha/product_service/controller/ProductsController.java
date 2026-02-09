@@ -3,8 +3,11 @@ package com.kukusha.product_service.controller;
 import com.kukusha.kafka_messages_sender.api.KafkaMessagesSenderAPI;
 import com.kukusha.kafka_messages_sender.model.EmailType;
 import com.kukusha.kafka_messages_sender.model.ProductCreatedData;
+import com.kukusha.product_service.client.PaymentServiceClient;
 import com.kukusha.product_service.database.model.Product;
 import com.kukusha.product_service.database.service.ProductsService;
+import com.kukusha.product_service.dto.BuyProductResponse;
+import com.kukusha.product_service.dto.CreatePaymentRequest;
 import com.kukusha.product_service.dto.ProductDTO;
 import com.kukusha.users_shared_lib.model.User;
 import com.kukusha.users_shared_lib.service.UsersService;
@@ -25,13 +28,16 @@ public class ProductsController {
     private final ProductsService productsService;
     private final KafkaMessagesSenderAPI kafkaMessagesSenderAPI;
     private final UsersService usersService;
+    private final PaymentServiceClient paymentServiceClient;
 
     public ProductsController(ProductsService productsService,
                               KafkaMessagesSenderAPI kafkaMessagesSenderAPI,
-                              UsersService usersService) {
+                              UsersService usersService,
+                              PaymentServiceClient paymentServiceClient) {
         this.productsService = productsService;
         this.kafkaMessagesSenderAPI = kafkaMessagesSenderAPI;
         this.usersService = usersService;
+        this.paymentServiceClient = paymentServiceClient;
     }
 
     @GetMapping
@@ -68,8 +74,9 @@ public class ProductsController {
     }
 
     @PostMapping(value = "/{id}/buy")
-    public ResponseEntity<Void> buyProduct(@PathVariable Long id,
-                                           Principal principal) {
+    public ResponseEntity<BuyProductResponse> buyProduct(@PathVariable Long id,
+                                                         @RequestHeader(value = "Authorization") String authHeader,
+                                                         Principal principal) {
         String username = principal.getName();
         Optional<Product> productOptional = productsService.findById(id);
 
@@ -82,13 +89,23 @@ public class ProductsController {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User can't buy own product!");
         }
 
-        if (product.status().equals(Product.ProductStatus.NOT_IN_STOCK)) {
+        if (product.isNotInStock()) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "No product in stock!");
         }
 
-        // TODO: If every check went well, call payment-service to create payment intent on Stripe
-        // TODO: If payment went well: product amount - 1. Notify owner of selling product
-        // TODO: If product amount == 0, product status: SELLED
-        return new ResponseEntity<>(HttpStatus.OK);
+        User buyer = usersService.findByUsername(username)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+
+        CreatePaymentRequest paymentRequest = CreatePaymentRequest.builder()
+                .amount(product.getPrice())
+                .currency("usd")
+                .email(buyer.getEmail())
+                .productId(product.getId())
+                .username(username)
+                .build();
+
+        BuyProductResponse response = paymentServiceClient.createPayment(paymentRequest, authHeader);
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 }

@@ -18,3 +18,8 @@ spring:
       hibernate:
         jdbc:
           time_zone: UTC
+
+services:
+  payment-service:
+    name: payment-service
+    url: http://127.0.0.1:9002

@@ -47,12 +47,11 @@ public class Product {
         this.username = username;
     }
 
-    public ProductStatus status() {
-        return this.amount == 0 ? ProductStatus.NOT_IN_STOCK : ProductStatus.IN_STOCK;
+    public boolean isInStock() {
+        return this.amount > 0;
     }
 
-    public enum ProductStatus {
-        IN_STOCK,
-        NOT_IN_STOCK
+    public boolean isNotInStock() {
+        return !isInStock();
     }
 }

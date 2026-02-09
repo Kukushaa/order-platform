@@ -8,9 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.HashMap;
-import java.util.Map;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -26,9 +23,11 @@ public class PaymentDTO {
     @Email
     private String email;
 
+    @NotNull
     private Long productId;
 
-    private Map<String, String> metaData = new HashMap<>();
+    @NotEmpty
+    private String username;
 
     public PaymentDTO() {
         this.currency = "usd";

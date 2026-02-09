@@ -1,9 +1,6 @@
 package com.kukusha.payment_service.database.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,22 +12,46 @@ import java.time.OffsetDateTime;
 @Setter
 @AllArgsConstructor
 @ToString
+@Entity
+@Table(name = "payment_info")
 public class PaymentInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String paymentId;
+
+    @Column(name = "payment_intent_id", nullable = false, unique = true)
+    private String paymentIntentId;
+
+    @Column(name = "client_secret", nullable = false)
     private String clientSecret;
-    @Column(name = "created_on", columnDefinition = "TIMESTAMPTZ")
+
+    @Column(nullable = false)
+    private String username;
+
+    @Column(name = "product_id", nullable = false)
+    private Long productId;
+
+    @Column(nullable = false)
+    private long amount;
+
+    @Column(nullable = false)
+    private String email;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
+    private Status status;
+
+    @Column(name = "created_on", nullable = false, columnDefinition = "TIMESTAMPTZ")
     private OffsetDateTime createdOn;
 
     public PaymentInfo() {
         this.createdOn = OffsetDateTime.now();
+        this.status = Status.PROCESSING;
     }
 
     public enum Status {
         PROCESSING,
-        ENDED,
-        CANCELLED,
+        COMPLETED,
+        CANCELLED
     }
 }

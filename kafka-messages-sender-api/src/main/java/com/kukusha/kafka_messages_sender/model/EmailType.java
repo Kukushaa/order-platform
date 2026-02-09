@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public enum EmailType {
     REGISTER_USER("emails.register"),
-    CREATE_PRODUCT("emails.product.create");
+    CREATE_PRODUCT("emails.product.create"),
+    PAYMENT_COMPLETED("emails.payment.completed");
 
     private final String kakfaKey;
 

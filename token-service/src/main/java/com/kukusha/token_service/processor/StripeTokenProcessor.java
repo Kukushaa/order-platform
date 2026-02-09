@@ -5,7 +5,9 @@ import com.kukusha.token_service.model.TokenObjectImpl;
 import com.kukusha.token_service.model.TokenType;
 import com.kukusha.token_service.service.ResourceLoaderService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class StripeTokenProcessor implements TokenProcessor {
     private final TokenObject tokenObject;
 

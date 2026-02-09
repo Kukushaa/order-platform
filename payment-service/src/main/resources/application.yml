@@ -4,3 +4,36 @@ server:
 spring:
   application:
     name: "payment-service"
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/products_management
+    username: usr
+    password: password
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+stripe:
+  api-key: sk_test_placeholder
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+token:
+  issuer: "payment-service"
+  minutes: 30
