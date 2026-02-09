@@ -6,6 +6,8 @@ import com.kukusha.kafka_messages_sender.model.ProductCreatedData;
 import com.kukusha.product_service.database.model.Product;
 import com.kukusha.product_service.database.service.ProductsService;
 import com.kukusha.product_service.dto.ProductDTO;
+import com.kukusha.users_shared_lib.model.User;
+import com.kukusha.users_shared_lib.service.UsersService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,11 +24,14 @@ import java.util.Optional;
 public class ProductsController {
     private final ProductsService productsService;
     private final KafkaMessagesSenderAPI kafkaMessagesSenderAPI;
+    private final UsersService usersService;
 
     public ProductsController(ProductsService productsService,
-                              KafkaMessagesSenderAPI kafkaMessagesSenderAPI) {
+                              KafkaMessagesSenderAPI kafkaMessagesSenderAPI,
+                              UsersService usersService) {
         this.productsService = productsService;
         this.kafkaMessagesSenderAPI = kafkaMessagesSenderAPI;
+        this.usersService = usersService;
     }
 
     @GetMapping
@@ -57,7 +62,8 @@ public class ProductsController {
                                               Principal principal) {
         String username = principal.getName();
         productsService.createNewProduct(dto, username);
-        kafkaMessagesSenderAPI.sendEmail(EmailType.CREATE_PRODUCT, new ProductCreatedData(username, "emailTo", dto.productType(), dto.price()));
+        User user = usersService.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")); // ADDITIONAL DEFENCE
+        kafkaMessagesSenderAPI.sendEmail(EmailType.CREATE_PRODUCT, new ProductCreatedData(username, user.getEmail(), dto.productType(), dto.price()));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 }
