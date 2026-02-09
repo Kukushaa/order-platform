@@ -10,7 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 @ComponentScan(basePackages = {
         "com.kukusha.users_service",
         "com.kukusha.token_service",
-        "com.kukusha.users_shared_lib",
+        "com.kukusha.users_shared_lib"
 })
 @EnableJpaRepositories(basePackages = {
         "com.kukusha.users_shared_lib.repository",

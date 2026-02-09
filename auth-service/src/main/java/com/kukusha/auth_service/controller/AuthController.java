@@ -1,15 +1,14 @@
 package com.kukusha.auth_service.controller;
 
-import com.kukusha.auth_service.db.service.UsersService;
 import com.kukusha.auth_service.dto.LoginRequestDTO;
 import com.kukusha.auth_service.dto.RefreshTokenRequestDTO;
-import com.kukusha.auth_service.dto.RegisterRequestDTO;
 import com.kukusha.auth_service.exceptions.UsernameExistsException;
 import com.kukusha.auth_service.response.TokenResponse;
 import com.kukusha.auth_service.service.AuthService;
 import com.kukusha.kafka_messages_sender.api.KafkaMessagesSenderAPI;
 import com.kukusha.kafka_messages_sender.model.EmailType;
 import com.kukusha.kafka_messages_sender.model.RegisterSuccessfullEmailData;
+import com.kukusha.users_shared_lib.dto.RegisterRequestDTO;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,11 +20,10 @@ import java.util.Map;
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthService authService;
-    private final UsersService usersService;
     private final KafkaMessagesSenderAPI kafkaMessagesSenderAPI;
 
-    public AuthController(UsersService usersService, AuthService authService, KafkaMessagesSenderAPI kafkaMessagesSenderAPI) {
-        this.usersService = usersService;
+    public AuthController(AuthService authService,
+                          KafkaMessagesSenderAPI kafkaMessagesSenderAPI) {
         this.authService = authService;
         this.kafkaMessagesSenderAPI = kafkaMessagesSenderAPI;
     }
@@ -39,11 +37,8 @@ public class AuthController {
 
     @PostMapping(value = "/register")
     public ResponseEntity<Void> register(@Valid @RequestBody RegisterRequestDTO registerRequestDTO) throws UsernameExistsException {
-        if (usersService.existsByUsername(registerRequestDTO.username())) {
-            throw new UsernameExistsException("User with this username already exists");
-        }
+        authService.registerUser(registerRequestDTO);
 
-        usersService.register(registerRequestDTO);
         kafkaMessagesSenderAPI.sendEmail(EmailType.REGISTER_USER, new RegisterSuccessfullEmailData(registerRequestDTO.email(), registerRequestDTO.username()));
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -1,9 +1,12 @@
 package com.kukusha.auth_service.service;
 
+import com.kukusha.auth_service.exceptions.UsernameExistsException;
 import com.kukusha.auth_service.response.TokenResponse;
 import com.kukusha.token_service.model.TokenCreateDTO;
 import com.kukusha.token_service.model.TokenType;
 import com.kukusha.token_service.service.TokenProcessorDriver;
+import com.kukusha.users_shared_lib.dto.RegisterRequestDTO;
+import com.kukusha.users_shared_lib.service.UsersService;
 import com.nimbusds.jose.jwk.JWKSet;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -32,10 +35,12 @@ public class AuthService {
 
     private final AuthenticationManager authenticationManager;
     private final TokenProcessorDriver tokenProcessorDriver;
+    private final UsersService usersService;
 
-    public AuthService(AuthenticationManager authenticationManager, TokenProcessorDriver tokenProcessorDriver) {
+    public AuthService(AuthenticationManager authenticationManager, TokenProcessorDriver tokenProcessorDriver, UsersService usersService) {
         this.authenticationManager = authenticationManager;
         this.tokenProcessorDriver = tokenProcessorDriver;
+        this.usersService = usersService;
     }
 
     public TokenResponse loginUser(String username, String password) {
@@ -47,6 +52,14 @@ public class AuthService {
         TokensData tokensData = generateTokens(userRoles, username, authenticate.getName());
 
         return new TokenResponse(tokensData.accessToken.token(), tokensData.refreshToken.token(), TOKEN_TYPE);
+    }
+
+    public void registerUser(RegisterRequestDTO dto) throws UsernameExistsException {
+        if (usersService.existsByUsername(dto.username())) {
+            throw new UsernameExistsException("User with this username already exists");
+        }
+
+        usersService.register(dto);
     }
 
     public Map<String, Object> getPublicJWKAsJsonObject() {
