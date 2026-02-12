@@ -1,5 +1,6 @@
 package com.kukusha.orders_service.database.model;
 
+import com.kukusha.kafka_messages_sender.model.Address;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -44,5 +45,13 @@ public class Order {
 
     public void addOrderHistory(OrderHistory orderHistory) {
         this.orderHistory.add(orderHistory);
+    }
+
+    public void setAddress(Address address) {
+        this.address = address.getAddress();
+        this.city = address.getCity();
+        this.country = address.getCountry();
+        this.state = address.getState();
+        this.zip = address.getZip();
     }
 }
