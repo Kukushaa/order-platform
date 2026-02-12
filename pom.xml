@@ -32,6 +32,7 @@
         <module>users-service</module>
         <module>kafka-messages-sender-api</module>
         <module>users-shared-lib</module>
+        <module>orders-service</module>
     </modules>
 
     <dependencyManagement>
