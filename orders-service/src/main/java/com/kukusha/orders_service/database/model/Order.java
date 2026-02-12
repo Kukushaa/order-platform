@@ -37,6 +37,7 @@ public class Order {
     private OffsetDateTime createdAt;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @OrderBy("date DESC")
     private List<OrderHistory> orderHistory;
 
     public Order() {

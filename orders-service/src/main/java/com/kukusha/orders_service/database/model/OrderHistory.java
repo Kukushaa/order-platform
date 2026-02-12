@@ -35,8 +35,7 @@ public class OrderHistory {
         SHIPPED,
         IN_TRANSIT,
         OUT_FOR_DELIVERY,
-        DELIVERED,
-        CANCELLED;
+        DELIVERED;
 
         public Status next() {
             Status[] values = Status.values();
