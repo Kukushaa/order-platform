@@ -45,6 +45,7 @@ public class OrdersController {
         history.setStatus(dto.getStatus());
         history.setManualChangeText(dto.getStatusChangeText());
         history.setDate(OffsetDateTime.now());
+        history.setOrder(order);
 
         order.addOrderHistory(history);
 
