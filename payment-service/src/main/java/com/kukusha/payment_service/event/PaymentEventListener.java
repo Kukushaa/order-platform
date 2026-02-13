@@ -53,6 +53,6 @@ public class PaymentEventListener {
                 )
         );
 
-        kafkaMessagesSenderAPI.sendMessage(KafkaMessagesTopics.PRODUCT_BUY, new ProductsBuyData(event.getProductId()));
+        kafkaMessagesSenderAPI.sendMessage(KafkaMessagesTopics.PRODUCT_BUY, new ProductsBuyData(paymentInfo.getUsername(), event.getProductId()));
     }
 }
