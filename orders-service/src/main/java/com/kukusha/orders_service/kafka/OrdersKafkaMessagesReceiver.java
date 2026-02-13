@@ -6,6 +6,8 @@ import com.kukusha.orders_service.database.service.OrdersService;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
+import java.time.OffsetDateTime;
+
 @Component
 public class OrdersKafkaMessagesReceiver {
     private final OrdersService ordersService;
@@ -21,6 +23,7 @@ public class OrdersKafkaMessagesReceiver {
         order.setOwner(newOrderData.getUsername());
         order.setReceiver(newOrderData.getReceiver());
         order.setAddress(newOrderData.getAddress());
+        order.setCreatedAt(OffsetDateTime.now());
 
         ordersService.save(order);
     }
