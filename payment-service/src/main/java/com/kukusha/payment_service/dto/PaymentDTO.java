@@ -1,7 +1,8 @@
 package com.kukusha.payment_service.dto;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,20 +14,20 @@ import lombok.Setter;
 @AllArgsConstructor
 @Builder
 public class PaymentDTO {
-    @NotNull
-    private Long amount;
+    @Min(value = 100, message = "Price must be minimum 1$")
+    private long amount;
 
-    @NotEmpty
+    @NotBlank(message = "Currency can't be empty")
     private String currency;
 
-    @NotEmpty
-    @Email
+    @NotBlank(message = "Email can't be empty")
+    @Email(message = "Invalid email")
     private String email;
 
-    @NotNull
+    @NotNull(message = "Product ID can't be null")
     private Long productId;
 
-    @NotEmpty
+    @NotBlank(message = "Username can't be empty")
     private String username;
 
     public PaymentDTO() {

@@ -1,7 +1,7 @@
 package com.kukusha.payment_service.controller;
 
-import com.kukusha.payment_service.dto.ConfirmPaymentRequest;
-import com.kukusha.payment_service.dto.CreatePaymentResponse;
+import com.kukusha.payment_service.request.ConfirmPaymentDTO;
+import com.kukusha.payment_service.response.CreatePaymentResponse;
 import com.kukusha.payment_service.dto.PaymentDTO;
 import com.kukusha.payment_service.service.PaymentService;
 import com.stripe.exception.StripeException;
@@ -29,7 +29,7 @@ public class PaymentsController {
     }
 
     @PostMapping(value = "/confirm")
-    public ResponseEntity<Void> confirmPayment(@Valid @RequestBody ConfirmPaymentRequest request) throws StripeException {
+    public ResponseEntity<Void> confirmPayment(@Valid @RequestBody ConfirmPaymentDTO request) throws StripeException {
         paymentService.confirmPayment(request);
         return new ResponseEntity<>(HttpStatus.OK);
     }

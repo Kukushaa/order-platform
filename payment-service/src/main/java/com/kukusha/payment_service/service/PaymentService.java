@@ -2,8 +2,8 @@ package com.kukusha.payment_service.service;
 
 import com.kukusha.payment_service.database.model.PaymentInfo;
 import com.kukusha.payment_service.database.service.PaymentInfoService;
-import com.kukusha.payment_service.dto.ConfirmPaymentRequest;
-import com.kukusha.payment_service.dto.CreatePaymentResponse;
+import com.kukusha.payment_service.request.ConfirmPaymentDTO;
+import com.kukusha.payment_service.response.CreatePaymentResponse;
 import com.kukusha.payment_service.dto.PaymentDTO;
 import com.kukusha.payment_service.event.PaymentCompletedEvent;
 import com.kukusha.payment_service.event.PaymentCreatedEvent;
@@ -62,8 +62,8 @@ public class PaymentService {
         return new CreatePaymentResponse(paymentToken, paymentIntent.getClientSecret());
     }
 
-    public void confirmPayment(ConfirmPaymentRequest request) throws StripeException {
-        String paymentIntentId = validateAndExtractPaymentIntentId(request.paymentToken());
+    public void confirmPayment(ConfirmPaymentDTO request) throws StripeException {
+        String paymentIntentId = validateAndExtractPaymentIntentId(request.getPaymentToken());
 
         PaymentIntent stripeIntent = stripeService.retrievePaymentIntent(paymentIntentId);
         if ("succeeded".equals(stripeIntent.getStatus())) {
