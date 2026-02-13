@@ -1,7 +1,7 @@
 package com.kukusha.product_service.client;
 
-import com.kukusha.product_service.dto.BuyProductResponse;
-import com.kukusha.product_service.dto.CreatePaymentRequest;
+import com.kukusha.product_service.response.BuyProductResponse;
+import com.kukusha.product_service.request.CreatePaymentRequest;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
