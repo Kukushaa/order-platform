@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: ${PORT:8080}
 
 spring:
   application:
@@ -7,15 +7,16 @@ spring:
 
   data:
     redis:
-      host: localhost
-      port: 6379
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
 
   security:
     oauth2:
       resourceserver:
         jwt:
           # Auth service JWK Set endpoint
-          jwk-set-uri: http://127.0.0.1:9000/auth/jwks
+          jwk-set-uri: ${AUTH_SERVICE_URL:http://127.0.0.1:9000}/auth/jwks
 
   cloud:
     gateway:
@@ -24,13 +25,13 @@ spring:
           # All routes
           routes:
             - id: auth
-              uri: http://127.0.0.1:9000
+              uri: ${AUTH_SERVICE_URL:http://127.0.0.1:9000}
               predicates:
                 - Path=/auth/**
               # no auth required (per SecurityConfig)
 
             - id: products
-              uri: http://127.0.0.1:9001
+              uri: ${PRODUCT_SERVICE_URL:http://127.0.0.1:9001}
               predicates:
                 - Path=/api/v1/products/**
               filters:
@@ -41,7 +42,7 @@ spring:
                     key-resolver: "#{@ipKeyResolver}"
 
             - id: payments
-              uri: http://127.0.0.1:9002
+              uri: ${PAYMENT_SERVICE_URL:http://127.0.0.1:9002}
               predicates:
                 - Path=/api/v1/payments/**
               filters:
@@ -52,7 +53,7 @@ spring:
                     key-resolver: "#{@ipKeyResolver}"
 
             - id: users
-              uri: http://127.0.0.1:9003
+              uri: ${USERS_SERVICE_URL:http://127.0.0.1:9003}
               predicates:
                 - Path=/api/v1/users/**
               filters:
@@ -63,7 +64,7 @@ spring:
                     key-resolver: "#{@ipKeyResolver}"
 
             - id: orders
-              uri: http://127.0.0.1:9004
+              uri: ${ORDERS_SERVICE_URL:http://127.0.0.1:9004}
               predicates:
                 - Path=/api/v1/orders/**
               filters:

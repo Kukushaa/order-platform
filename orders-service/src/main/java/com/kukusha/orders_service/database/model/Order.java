@@ -55,4 +55,9 @@ public class Order {
         this.state = address.getState();
         this.zip = address.getZip();
     }
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = OffsetDateTime.now();
+    }
 }

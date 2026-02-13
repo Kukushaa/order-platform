@@ -3,6 +3,8 @@ package com.kukusha.users_shared_lib.service;
 import com.kukusha.users_shared_lib.dto.RegisterRequestDTO;
 import com.kukusha.users_shared_lib.model.User;
 import com.kukusha.users_shared_lib.repository.UsersRepository;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -22,11 +24,13 @@ public class UsersService implements UserDetailsService {
     }
 
     @Override
+    @Cacheable(value = "user", key = "#username")
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         return findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not found: " + username));
     }
 
+    @Cacheable(value = "user", key = "#username", unless = "#result == null || #result.isEmpty()")
     public Optional<User> findByUsername(String username) {
         return repository.findByUsername(username);
     }
@@ -49,7 +53,8 @@ public class UsersService implements UserDetailsService {
         save(user);
     }
 
-    private void save(User user) {
+    @CacheEvict(value = "user", key = "#user.username")
+    public void save(User user) {
         repository.save(user);
     }
 }

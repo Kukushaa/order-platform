@@ -23,7 +23,6 @@ public class OrdersKafkaMessagesReceiver {
         order.setOwner(newOrderData.getUsername());
         order.setReceiver(newOrderData.getReceiver());
         order.setAddress(newOrderData.getAddress());
-        order.setCreatedAt(OffsetDateTime.now());
 
         ordersService.save(order);
     }

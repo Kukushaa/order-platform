@@ -1,14 +1,14 @@
 server:
-  port: 9001
+  port: ${PORT:9001}
 
 spring:
   application:
     name: product-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/products_management
-    username: usr
-    password: password
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/products_management}
+    username: ${DATABASE_USERNAME:usr}
+    password: ${DATABASE_PASSWORD:password}
 
   jpa:
     open-in-view: false
@@ -19,7 +19,33 @@ spring:
         jdbc:
           time_zone: UTC
 
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.kukusha.*
+    properties:
+      security.protocol: ${KAFKA_SECURITY_PROTOCOL:PLAINTEXT}
+      sasl.mechanism: ${KAFKA_SASL_MECHANISM:SCRAM-SHA-256}
+      sasl.jaas.config: ${KAFKA_SASL_JAAS_CONFIG:}
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+  cache:
+    type: redis
+
 services:
   payment-service:
     name: payment-service
-    url: http://127.0.0.1:9002
+    url: ${PAYMENT_SERVICE_URL:http://127.0.0.1:9002}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info

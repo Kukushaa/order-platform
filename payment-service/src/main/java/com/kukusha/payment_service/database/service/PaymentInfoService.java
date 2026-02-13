@@ -18,7 +18,7 @@ public class PaymentInfoService {
         repositroy.save(paymentInfo);
     }
 
-    public Optional<PaymentInfo> findByPaymentIntentId(String paymentIntentId) {
-        return repositroy.findByPaymentIntentId(paymentIntentId);
+    public Optional<PaymentInfo> findByPaymentIntentIdWithLock(String paymentIntentId) {
+        return repositroy.findWithLockByPaymentIntentId(paymentIntentId);
     }
 }

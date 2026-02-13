@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.temporal.ChronoUnit;
@@ -62,6 +63,7 @@ public class PaymentService {
         return new CreatePaymentResponse(paymentToken, paymentIntent.getClientSecret());
     }
 
+    @Transactional
     public void confirmPayment(ConfirmPaymentDTO request) throws StripeException {
         String paymentIntentId = validateAndExtractPaymentIntentId(request.getPaymentToken());
 
@@ -70,14 +72,14 @@ public class PaymentService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Payment already processed");
         }
 
-        PaymentInfo paymentInfo = paymentInfoService.findByPaymentIntentId(paymentIntentId)
+        PaymentInfo paymentInfo = paymentInfoService.findByPaymentIntentIdWithLock(paymentIntentId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Payment not found"));
 
         if (paymentInfo.getStatus() == PaymentInfo.Status.COMPLETED) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Payment already completed");
         }
 
-        eventPublisher.publishEvent(new PaymentCompletedEvent(this, paymentInfo));
+        eventPublisher.publishEvent(new PaymentCompletedEvent(this, paymentInfo, request.getProductId()));
     }
 
     private String createPaymentToken(String paymentIntentId, String username, Long productId) {
