@@ -24,14 +24,16 @@ public class TemplatesService {
 
     @Getter
     public enum Templates {
-        REGISTRATION("email/users/register"),
-        PRODUCT_CREATE("email/products/create"),
-        PAYMENT_COMPLETED("email/payments/completed");
+        REGISTRATION("email/users/register", "Welcome!"),
+        PRODUCT_CREATE("email/products/create", "Product was created!"),
+        PAYMENT_COMPLETED("email/payments/completed", "Your payment completed successfully!"),;
 
         private final String template;
+        private final String subject;
 
-        Templates(String template) {
+        Templates(String template, String subject) {
             this.template = template;
+            this.subject = subject;
         }
     }
 }

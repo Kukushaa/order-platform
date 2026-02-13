@@ -43,7 +43,7 @@ public class KafkaMailSenderComponent {
         String template = templatesService.getTemplate(templateName, toMap(data));
 
         try {
-            mailService.sendHtml(data.getEmailTo(), "Welcome!", template);
+            mailService.sendHtml(data.getEmailTo(), templateName.getSubject(), template);
         } catch (MessagingException e) {
             throw new RuntimeException(e);
         }
