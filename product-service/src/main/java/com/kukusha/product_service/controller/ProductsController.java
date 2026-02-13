@@ -2,10 +2,12 @@ package com.kukusha.product_service.controller;
 
 import com.kukusha.kafka_messages_sender.api.KafkaMessagesSenderAPI;
 import com.kukusha.kafka_messages_sender.model.EmailType;
+import com.kukusha.kafka_messages_sender.model.NewOrderData;
 import com.kukusha.kafka_messages_sender.model.ProductCreatedData;
 import com.kukusha.product_service.client.PaymentServiceClient;
 import com.kukusha.product_service.database.model.Product;
 import com.kukusha.product_service.database.service.ProductsService;
+import com.kukusha.product_service.dto.BuyProductDTO;
 import com.kukusha.product_service.dto.BuyProductResponse;
 import com.kukusha.product_service.dto.CreatePaymentRequest;
 import com.kukusha.product_service.dto.ProductDTO;
@@ -76,6 +78,7 @@ public class ProductsController {
     @PostMapping(value = "/{id}/buy")
     public ResponseEntity<BuyProductResponse> buyProduct(@PathVariable Long id,
                                                          @RequestHeader(value = "Authorization") String authHeader,
+                                                         @Valid @RequestBody BuyProductDTO buyProductDTO,
                                                          Principal principal) {
         String username = principal.getName();
         Optional<Product> productOptional = productsService.findById(id);
@@ -85,7 +88,8 @@ public class ProductsController {
         }
 
         Product product = productOptional.get();
-        if (product.getUsername().equals(username)) {
+        String productUsername = product.getUsername();
+        if (productUsername.equals(username)) {
             throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User can't buy own product!");
         }
 
@@ -105,6 +109,7 @@ public class ProductsController {
                 .build();
 
         BuyProductResponse response = paymentServiceClient.createPayment(paymentRequest, authHeader);
+        kafkaMessagesSenderAPI.createOrder(new NewOrderData(productUsername, username, buyProductDTO.getAddress()));
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
