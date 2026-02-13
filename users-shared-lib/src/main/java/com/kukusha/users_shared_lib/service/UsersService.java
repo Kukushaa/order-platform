@@ -49,7 +49,7 @@ public class UsersService implements UserDetailsService {
         save(user);
     }
 
-    private void save(User user) {
+    public void save(User user) {
         repository.save(user);
     }
 }
