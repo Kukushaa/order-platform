@@ -6,6 +6,7 @@ import com.kukusha.orders_service.database.service.OrdersService;
 import com.kukusha.orders_service.dto.UpdateOrderDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
@@ -31,7 +32,7 @@ public class OrdersController {
 
     @PutMapping(value = "/{id}")
     public ResponseEntity<Order> updateOrder(@PathVariable Long id,
-                                             @RequestBody UpdateOrderDTO dto) {
+                                             @Valid @RequestBody UpdateOrderDTO dto) {
         Optional<Order> byId = ordersService.findById(id);
 
         if (byId.isEmpty()) {
