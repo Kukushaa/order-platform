@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.time.OffsetDateTime;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -61,7 +62,13 @@ public class OrdersController {
 
         Order order = byId.get();
 
-        OrderHistory.Status status = order.getOrderHistory().get(0).getStatus();
+        List<OrderHistory> orderHistory = order.getOrderHistory();
+
+        if (orderHistory.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        OrderHistory.Status status = orderHistory.getFirst().getStatus();
 
         if (status == OrderHistory.Status.DELIVERED) {
             Map<String, String> message = new HashMap<>();
@@ -69,13 +76,13 @@ public class OrdersController {
             return new ResponseEntity<>(message, HttpStatus.OK);
         }
 
-        OrderHistory orderHistory = new OrderHistory();
+        OrderHistory newOrderHistory = new OrderHistory();
 
-        orderHistory.setStatus(status.next());
-        orderHistory.setDate(OffsetDateTime.now());
-        orderHistory.setOrder(order);
+        newOrderHistory.setStatus(status.next());
+        newOrderHistory.setDate(OffsetDateTime.now());
+        newOrderHistory.setOrder(order);
 
-        order.addOrderHistory(orderHistory);
+        order.addOrderHistory(newOrderHistory);
 
         ordersService.save(order);
 
