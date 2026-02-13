@@ -79,7 +79,7 @@ public class PaymentService {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Payment already completed");
         }
 
-        eventPublisher.publishEvent(new PaymentCompletedEvent(this, paymentInfo));
+        eventPublisher.publishEvent(new PaymentCompletedEvent(this, paymentInfo, request.getProductId()));
     }
 
     private String createPaymentToken(String paymentIntentId, String username, Long productId) {

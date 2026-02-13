@@ -33,7 +33,7 @@ public class ProductsService {
         save(new Product(dto, username));
     }
 
-    private void save(Product product) {
+    public void save(Product product) {
         repository.save(product);
     }
 }

@@ -3,6 +3,7 @@ package com.kukusha.payment_service.event;
 import com.kukusha.kafka_messages_sender.api.KafkaMessagesSenderAPI;
 import com.kukusha.kafka_messages_sender.model.KafkaMessagesTopics;
 import com.kukusha.kafka_messages_sender.model.PaymentCompletedData;
+import com.kukusha.kafka_messages_sender.model.ProductsBuyData;
 import com.kukusha.payment_service.database.model.PaymentInfo;
 import com.kukusha.payment_service.database.service.PaymentInfoService;
 import org.springframework.context.event.EventListener;
@@ -37,6 +38,10 @@ public class PaymentEventListener {
         paymentInfo.setStatus(PaymentInfo.Status.COMPLETED);
         paymentInfoService.save(paymentInfo);
 
+        sendKafkaMessages(event, paymentInfo);
+    }
+
+    private void sendKafkaMessages(PaymentCompletedEvent event, PaymentInfo paymentInfo) {
         kafkaMessagesSenderAPI.sendMessage(
                 KafkaMessagesTopics.PAYMENT_COMPLETED,
                 new PaymentCompletedData(
@@ -47,5 +52,7 @@ public class PaymentEventListener {
                         paymentInfo.getAmount()
                 )
         );
+
+        kafkaMessagesSenderAPI.sendMessage(KafkaMessagesTopics.PRODUCT_BUY, new ProductsBuyData(event.getProductId()));
     }
 }
