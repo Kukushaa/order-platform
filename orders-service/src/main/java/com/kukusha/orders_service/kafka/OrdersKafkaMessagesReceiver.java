@@ -7,10 +7,10 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class OrdersKafkaMessagesReciver {
+public class OrdersKafkaMessagesReceiver {
     private final OrdersService ordersService;
 
-    public OrdersKafkaMessagesReciver(OrdersService ordersService) {
+    public OrdersKafkaMessagesReceiver(OrdersService ordersService) {
         this.ordersService = ordersService;
     }
 
@@ -19,7 +19,7 @@ public class OrdersKafkaMessagesReciver {
         Order order = new Order();
 
         order.setOwner(newOrderData.getUsername());
-        order.setReciver(newOrderData.getReciver());
+        order.setReceiver(newOrderData.getReceiver());
         order.setAddress(newOrderData.getAddress());
 
         ordersService.save(order);

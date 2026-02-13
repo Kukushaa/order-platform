@@ -24,7 +24,7 @@ public class Order {
     private Long id;
 
     private String owner;
-    private String reciver;
+    private String receiver;
 
     // Address dates
     private String address;

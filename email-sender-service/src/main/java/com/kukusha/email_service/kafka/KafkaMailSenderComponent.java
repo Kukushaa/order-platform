@@ -7,7 +7,7 @@ import com.kukusha.email_service.service.TemplatesService;
 import com.kukusha.kafka_messages_sender.model.KafkaEmailMessageObject;
 import com.kukusha.kafka_messages_sender.model.PaymentCompletedData;
 import com.kukusha.kafka_messages_sender.model.ProductCreatedData;
-import com.kukusha.kafka_messages_sender.model.RegisterSuccessfullEmailData;
+import com.kukusha.kafka_messages_sender.model.RegisterSuccessfulEmailData;
 import jakarta.mail.MessagingException;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -25,7 +25,7 @@ public class KafkaMailSenderComponent {
     }
 
     @KafkaListener(topics = "emails.register", groupId = "email-sender-service")
-    public void sendEmail(RegisterSuccessfullEmailData data) {
+    public void sendEmail(RegisterSuccessfulEmailData data) {
         sendEmail(TemplatesService.Templates.REGISTRATION, data);
     }
 

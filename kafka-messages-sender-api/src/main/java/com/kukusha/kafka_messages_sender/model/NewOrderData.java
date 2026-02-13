@@ -6,13 +6,13 @@ import lombok.Setter;
 @Getter
 @Setter
 public class NewOrderData extends KafkaMessageObject {
-    private String reciver;
+    private String receiver;
     private Address address;
 
-    public NewOrderData(String username, String reciver, Address address) {
+    public NewOrderData(String username, String receiver, Address address) {
         super(username);
 
-        this.reciver = reciver;
+        this.receiver = receiver;
         this.address = address;
     }
 }
