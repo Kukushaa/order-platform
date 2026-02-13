@@ -1,14 +1,14 @@
 server:
-  port: 9002
+  port: ${PORT:9002}
 
 spring:
   application:
     name: "payment-service"
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/products_management
-    username: usr
-    password: password
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/products_management}
+    username: ${DATABASE_USERNAME:usr}
+    password: ${DATABASE_PASSWORD:password}
 
   jpa:
     open-in-view: false
@@ -20,13 +20,17 @@ spring:
           time_zone: UTC
 
   kafka:
-    bootstrap-servers: localhost:9092
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    properties:
+      security.protocol: ${KAFKA_SECURITY_PROTOCOL:PLAINTEXT}
+      sasl.mechanism: ${KAFKA_SASL_MECHANISM:SCRAM-SHA-256}
+      sasl.jaas.config: ${KAFKA_SASL_JAAS_CONFIG:}
 
 stripe:
-  api-key: sk_test_placeholder
+  api-key: ${STRIPE_API_KEY:sk_test_placeholder}
 
 management:
   endpoints:

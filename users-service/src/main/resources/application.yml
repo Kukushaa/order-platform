@@ -1,14 +1,14 @@
 server:
-  port: 9003
+  port: ${PORT:9003}
 
 spring:
   application:
     name: "users-service"
 
   datasource:
-    url: jdbc:postgresql://localhost:5432/products_management
-    username: usr
-    password: password
+    url: ${DATABASE_URL:jdbc:postgresql://localhost:5432/products_management}
+    username: ${DATABASE_USERNAME:usr}
+    password: ${DATABASE_PASSWORD:password}
 
   jpa:
     open-in-view: false
@@ -18,3 +18,17 @@ spring:
       hibernate:
         jdbc:
           time_zone: UTC
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+  cache:
+    type: redis
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
