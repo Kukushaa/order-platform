@@ -71,7 +71,7 @@ public class ProductsController {
         String username = principal.getName();
         productsService.createNewProduct(dto, username);
         User user = usersService.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")); // ADDITIONAL DEFENCE
-        kafkaMessagesSenderAPI.sendEmail(EmailType.CREATE_PRODUCT, new ProductCreatedData(username, user.getEmail(), dto.productType(), dto.price()));
+        kafkaMessagesSenderAPI.sendEmail(EmailType.CREATE_PRODUCT, new ProductCreatedData(username, user.getEmail(), dto.getProductType(), dto.getPrice()));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
