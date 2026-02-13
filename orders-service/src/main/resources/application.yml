@@ -1,0 +1,20 @@
+server:
+  port: 9004
+
+spring:
+  application:
+    name: orders-service
+
+  datasource:
+    url: jdbc:postgresql://localhost:5432/products_management
+    username: usr
+    password: password
+
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
