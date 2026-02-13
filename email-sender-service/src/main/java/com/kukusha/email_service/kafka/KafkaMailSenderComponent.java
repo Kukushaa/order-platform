@@ -9,12 +9,14 @@ import com.kukusha.kafka_messages_sender.model.PaymentCompletedData;
 import com.kukusha.kafka_messages_sender.model.ProductCreatedData;
 import com.kukusha.kafka_messages_sender.model.RegisterSuccessfulEmailData;
 import jakarta.mail.MessagingException;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
 @Component
+@Slf4j
 public class KafkaMailSenderComponent {
     private final MailService mailService;
     private final TemplatesService templatesService;
@@ -40,12 +42,14 @@ public class KafkaMailSenderComponent {
     }
 
     private void sendEmail(TemplatesService.Templates templateName, KafkaEmailMessageObject data) {
+        log.debug("Sending email to {}", templateName);
         String template = templatesService.getTemplate(templateName, toMap(data));
 
         try {
+            log.info("Sending email to {} template {}", data.getEmailTo(), templateName);
             mailService.sendHtml(data.getEmailTo(), templateName.getSubject(), template);
         } catch (MessagingException e) {
-            throw new RuntimeException(e);
+            log.error("Error sending email to {}", data.getEmailTo(), e);
         }
     }
 
