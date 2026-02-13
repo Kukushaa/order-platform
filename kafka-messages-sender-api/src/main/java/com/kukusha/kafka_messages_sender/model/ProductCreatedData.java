@@ -1,10 +1,12 @@
 package com.kukusha.kafka_messages_sender.model;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
+@NoArgsConstructor
 public class ProductCreatedData extends KafkaEmailMessageObject {
     private String productType;
     private long price;
