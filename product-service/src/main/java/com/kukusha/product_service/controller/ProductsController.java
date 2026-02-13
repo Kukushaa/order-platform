@@ -1,16 +1,16 @@
 package com.kukusha.product_service.controller;
 
 import com.kukusha.kafka_messages_sender.api.KafkaMessagesSenderAPI;
-import com.kukusha.kafka_messages_sender.model.EmailType;
+import com.kukusha.kafka_messages_sender.model.KafkaMessagesTopics;
 import com.kukusha.kafka_messages_sender.model.NewOrderData;
 import com.kukusha.kafka_messages_sender.model.ProductCreatedData;
 import com.kukusha.product_service.client.PaymentServiceClient;
 import com.kukusha.product_service.database.model.Product;
 import com.kukusha.product_service.database.service.ProductsService;
 import com.kukusha.product_service.dto.BuyProductDTO;
-import com.kukusha.product_service.response.BuyProductResponse;
-import com.kukusha.product_service.request.CreatePaymentRequest;
 import com.kukusha.product_service.dto.ProductDTO;
+import com.kukusha.product_service.request.CreatePaymentRequest;
+import com.kukusha.product_service.response.BuyProductResponse;
 import com.kukusha.users_shared_lib.model.User;
 import com.kukusha.users_shared_lib.service.UsersService;
 import jakarta.validation.Valid;
@@ -70,8 +70,14 @@ public class ProductsController {
                                               Principal principal) {
         String username = principal.getName();
         productsService.createNewProduct(dto, username);
+
         User user = usersService.findByUsername(username).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found")); // ADDITIONAL DEFENCE
-        kafkaMessagesSenderAPI.sendEmail(EmailType.CREATE_PRODUCT, new ProductCreatedData(username, user.getEmail(), dto.getProductType(), dto.getPrice()));
+
+        kafkaMessagesSenderAPI.sendMessage(
+                KafkaMessagesTopics.CREATE_PRODUCT,
+                new ProductCreatedData(username, user.getEmail(), dto.getProductType(), dto.getPrice())
+        );
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -109,7 +115,10 @@ public class ProductsController {
                 .build();
 
         BuyProductResponse response = paymentServiceClient.createPayment(paymentRequest, authHeader);
-        kafkaMessagesSenderAPI.createOrder(new NewOrderData(productUsername, username, buyProductDTO.getAddress()));
+        kafkaMessagesSenderAPI.sendMessage(
+                KafkaMessagesTopics.ORDER_CREATE,
+                new NewOrderData(productUsername, username, buyProductDTO.getAddress())
+        );
 
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }

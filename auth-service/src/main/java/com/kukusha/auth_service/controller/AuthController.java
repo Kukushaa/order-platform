@@ -6,7 +6,7 @@ import com.kukusha.auth_service.exceptions.UsernameExistsException;
 import com.kukusha.auth_service.response.TokenResponse;
 import com.kukusha.auth_service.service.AuthService;
 import com.kukusha.kafka_messages_sender.api.KafkaMessagesSenderAPI;
-import com.kukusha.kafka_messages_sender.model.EmailType;
+import com.kukusha.kafka_messages_sender.model.KafkaMessagesTopics;
 import com.kukusha.kafka_messages_sender.model.RegisterSuccessfullEmailData;
 import com.kukusha.users_shared_lib.dto.RegisterRequestDTO;
 import jakarta.validation.Valid;
@@ -39,7 +39,7 @@ public class AuthController {
     public ResponseEntity<Void> register(@Valid @RequestBody RegisterRequestDTO registerRequestDTO) throws UsernameExistsException {
         authService.registerUser(registerRequestDTO);
 
-        kafkaMessagesSenderAPI.sendEmail(EmailType.REGISTER_USER, new RegisterSuccessfullEmailData(registerRequestDTO.email(), registerRequestDTO.username()));
+        kafkaMessagesSenderAPI.sendMessage(KafkaMessagesTopics.REGISTER_USER, new RegisterSuccessfullEmailData(registerRequestDTO.email(), registerRequestDTO.username()));
         return new ResponseEntity<>(HttpStatus.OK);
     }
 

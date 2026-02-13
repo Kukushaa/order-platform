@@ -1,7 +1,7 @@
 package com.kukusha.payment_service.event;
 
 import com.kukusha.kafka_messages_sender.api.KafkaMessagesSenderAPI;
-import com.kukusha.kafka_messages_sender.model.EmailType;
+import com.kukusha.kafka_messages_sender.model.KafkaMessagesTopics;
 import com.kukusha.kafka_messages_sender.model.PaymentCompletedData;
 import com.kukusha.payment_service.database.model.PaymentInfo;
 import com.kukusha.payment_service.database.service.PaymentInfoService;
@@ -37,8 +37,8 @@ public class PaymentEventListener {
         paymentInfo.setStatus(PaymentInfo.Status.COMPLETED);
         paymentInfoService.save(paymentInfo);
 
-        kafkaMessagesSenderAPI.sendEmail(
-                EmailType.PAYMENT_COMPLETED,
+        kafkaMessagesSenderAPI.sendMessage(
+                KafkaMessagesTopics.PAYMENT_COMPLETED,
                 new PaymentCompletedData(
                         paymentInfo.getUsername(),
                         paymentInfo.getEmail(),

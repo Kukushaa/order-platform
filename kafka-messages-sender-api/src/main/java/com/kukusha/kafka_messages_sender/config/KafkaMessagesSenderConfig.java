@@ -7,5 +7,5 @@ import org.springframework.context.annotation.PropertySource;
 @Configuration
 @ComponentScan("com.kukusha.kafka_messages_sender")
 @PropertySource("classpath:application.yml")
-public class EmailSenderAPIConfig {
+public class KafkaMessagesSenderConfig {
 }
